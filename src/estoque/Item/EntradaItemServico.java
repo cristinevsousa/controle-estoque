@@ -1,23 +1,33 @@
-package estoque;
+package estoque.Item;
 
 import java.text.ParseException;
 import java.util.Date;
 
-public class Entrada { 
+import estoque.Visualizar;
+
+public class EntradaItemServico implements IEntradaItemServico { 
 	
-	private int codigo;
 	private Visualizar visualizar = new Visualizar();
 	private ItemServico itemServico = new ItemServico();
 
-	public void entradaItem() throws ParseException {
-			//desenvolvendo entrada de itens, corrigir loop
+	public void entrada() throws ParseException {
+		
+		Item infoTemp = visualizar.infoCompra();
+		
+		String fornecedor = infoTemp.getFornecedor();						
+		Date dataEntrada = infoTemp.getDataEntrada();
+			
+		infoTemp.setDataEntrada(dataEntrada);
+		infoTemp.setFornecedor(fornecedor);
+				
 		while (true) {
 			
 			Item itemTemp = visualizar.infoAdicionarCompraItem(); 
+			if (itemTemp == null) {break;}
 			
 			String nomeItem = itemTemp.getNome();
 			
-			if (nomeItem.equals("0")) {break;}
+			System.out.println("Nome item - entrada: " + nomeItem);
 		        
 			float qtd = itemTemp.getQtd();
 			float valorUnidade = itemTemp.getValorUnidade();		
@@ -29,6 +39,9 @@ public class Entrada {
 				float soma = item.getQtd() + qtd;
 				item.setQtd(soma);
 				item.setValorUnidade(valorUnidade);
+				item.setDataEntrada(infoTemp.getDataEntrada());
+				item.setFornecedor(infoTemp.getFornecedor());
+				
 				//altera as informações do item cadastrado, para registrar o ultimo fornecedor e a ultima data da compra
 				itemServico.editarItem(item);
 				
@@ -37,39 +50,7 @@ public class Entrada {
 				visualizar.infoAdicionarCompraItem();
 			}
 		}
-		//desenvolvendo registro do fornecedor e data da compra
-		Item infoTemp = visualizar.infoCompra();
-		
-		if (infoTemp != null) {
-		
-		String fornecedor = infoTemp.getFornecedor();						
-		Date dataEntrada = infoTemp.getDataEntrada();
-			
-		infoTemp.setDataEntrada(dataEntrada);
-		infoTemp.setFornecedor(fornecedor);
-		setCodigoEntrada(getCodigoEntrada());
-		
-		} else {
-			visualizar.msgErro();
-		}
 	
-	}
-	
-	
-	public void valorTotal() {
-		
-	}
-	
-	public void pagamento() {
-		
-	}
-
-	public int getCodigoEntrada() {
-		return codigo;
-	}
-
-	public void setCodigoEntrada(int codigoEntrada) {
-		this.codigo = ListaEstatica.entradas.size() +1;
 	}
 
 }

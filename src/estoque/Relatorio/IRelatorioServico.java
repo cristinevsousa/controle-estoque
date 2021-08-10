@@ -1,7 +1,7 @@
-package estoque;
+package estoque.Relatorio;
 
 
-public interface IRelatorio {
+public abstract interface IRelatorioServico {
 	//desenvolver interface para o relatório padrão que pode vir a receber outros relatórios
 	//a serem implementados futuramente: ex.: saídas, entradas, itens por grupo, validade, etc.
 	//ordem de compra pode migrar para tipo de relatorio.

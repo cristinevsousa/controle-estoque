@@ -1,4 +1,4 @@
-package estoque;
+package estoque.Item;
 
 import java.util.Date;
 
@@ -89,19 +89,19 @@ public class Item {
 		return qtd;
 	}
 	public void setQtd(float qtd) {
-		this.qtd = 0;
+		this.qtd = qtd;
 	}
 	public float getValorUnidade() {
 		return valorUnidade;
 	}
 	public void setValorUnidade(float valorUnidade) {
-		this.valorUnidade = 0;
+		this.valorUnidade = valorUnidade;
 	}
 	public String getFornecedor() {
 		return fornecedor;
 	}
 	public void setFornecedor(String fornecedor) {
-		this.fornecedor = null;
+		this.fornecedor = fornecedor;
 	}
 	
 }

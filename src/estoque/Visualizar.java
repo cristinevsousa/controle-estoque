@@ -6,20 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+import estoque.Item.IItemServico;
+import estoque.Item.Item;
+import estoque.Item.ItemServico;
+import estoque.Usuario.Usuario;
+
 public class Visualizar {
 	
-	ItemServico itemServico = new ItemServico();
+	IItemServico itemServico = new ItemServico();
 	private Scanner scanner = new Scanner(System.in);
-	
-	public void verMenuAlterar() {
-		System.out.println("*********************************************");
-		System.out.println("Escolha uma das opções a seguir:");
-		System.out.println("(1) Cadastrar");
-		System.out.println("(2) Editar");
-		System.out.println("(3) Remover");
-		System.out.println("(4) Voltar ao Menu principal");
-		System.out.println("*********************************************");
-	}
 	
 	public void verMenu() {
 		System.out.println("*********************************************");
@@ -34,33 +29,46 @@ public class Visualizar {
 		System.out.println("*********************************************");
 	}
 	
+	public void verMenuAlterar() {
+		System.out.println("*********************************************");
+		System.out.println("Escolha uma das opções a seguir:");
+		System.out.println("(1) Cadastrar");
+		System.out.println("(2) Editar");
+		System.out.println("(3) Remover");
+		System.out.println("(4) Voltar ao Menu principal");
+		System.out.println("*********************************************");
+	}
+	
 	public String solicitarNome() {
 		System.out.println("Digite o nome de usuario");
-		String nome = scanner.nextLine();
+		String nome = scanner.next();
 		return nome;
 	}
 	
 	public Usuario solicitarDadosUsuario() {
 		System.out.println("Digite o nome de usuario e senha");
-		String nome = scanner.nextLine();
-		String senha = scanner.nextLine();
+		String nome = scanner.next();
+		String senha = scanner.next();
 		return new Usuario(nome, senha, false);
 	}
 	
 	public String solicitarItem() {
 		System.out.println("Digite o nome do item");
-		String nome = scanner.nextLine();
+		String nome = scanner.next();
 		return nome;
 	}
 	
 	public Item solicitarDadosItem() {
-		System.out.println("Digite o NOME, UNIDADE DE MEDIDA, DESCRIÇÃO, ESTOQUE MÍNIMO e ESTOQUE MÁXIMO do item");
-		System.out.println("Formato das UNIDADES DE MEDIDA: und, kg, litro ou caixa");
 		
+		System.out.println("Digite o nome: ");
 		String nome = scanner.next();
+		System.out.println("Digite a unidade de medida (und, kg, litro ou caixa): ");
 		String undMedida = scanner.next();
+		System.out.println("Digite a descrição: ");
 		String desc = scanner.next();
+		System.out.println("Digite o estoque mínimo: ");
 		float qtdMinima = scanner.nextFloat();
+		System.out.println("Digite o estoque máximo: ");
 		float qtdMaxima = scanner.nextFloat();
 		
 		return new Item(undMedida, nome, desc, qtdMinima, qtdMaxima);
@@ -69,14 +77,23 @@ public class Visualizar {
 	public Item infoAdicionarCompraItem()  {
 		
 		System.out.println("*********************************************");
-		System.out.println("              Entrada de item");
+		System.out.println("              Entrada de itens");
 		System.out.println("*********************************************");
 		
-		System.out.println("Informe o nome, quantidade e valor do produto seguidos de [ENTER]: ");
-		System.out.println("Para finalizar a entrada e registrar data e fornecedor digite [0 + ENTER]: ");
-			
+		System.out.println("Para entrada de itens digite (1), para sair digite (0): ");
+		int opcao = scanner.nextInt();
+		
+		if (opcao == 0) {
+			return null;
+		}
+		
+		System.out.println("*Digite a seguir os itens do mesmo fornecedor*");
+		
+		System.out.println("Informe o nome: ");
 		String nome = scanner.next();
+		System.out.println("Informe a quantidade: ");
 		float qtd = scanner.nextFloat();
+		System.out.println("Informe o valor do produto: ");
 		float valorUnidade = scanner.nextFloat();
 		
 		Item itemEntrada = new Item(nome);
@@ -89,22 +106,53 @@ public class Visualizar {
 	
 	public Item infoCompra() throws ParseException {
 		
-		System.out.println("Nome do fornecedor: ");
-		String fornecedor = scanner.nextLine();
+		System.out.println("Informe o fornecedor da compra: ");
+		String fornecedor = scanner.next();
 		
-		System.out.println("Data da compra: (dd/MM/aaaa)");
-		String dataEntrada = scanner.nextLine();
+		System.out.println("Informe a data da compra: (dd/MM/aaaa)");
+		String dataEntrada = scanner.next();
 		Date data = new SimpleDateFormat("dd/MM/yyyy").parse(dataEntrada);
 		
-		Item itemEntrada = new Item(fornecedor, data);
-
-		itemEntrada.setFornecedor(fornecedor);
-		itemEntrada.setDataEntrada(data);
-		return itemEntrada;
+		return new Item(fornecedor, data);
 	}
 	
 	public void msgErro() {
 		System.out.println("Objeto não encontrado!");
+	}
+	
+	public Item infoAdicionarSaidaItem()  {
+		
+		System.out.println("*********************************************");
+		System.out.println("              Saída de itens");
+		System.out.println("*********************************************");
+		
+		System.out.println("Para saída de itens digite (1), para sair digite (0): ");
+		int opcao = scanner.nextInt();
+		
+		if (opcao == 0) {
+			return null;
+		}
+		
+		System.out.println("*Digite a seguir os itens retirados do estoque*");		
+		
+		System.out.println("Informe o nome: ");
+		String nome = scanner.next();
+		System.out.println("Informe a quantidade: ");
+		float qtd = scanner.nextFloat();
+		
+		Item itemSaida = new Item(nome);
+
+		itemSaida.setQtd(qtd);
+		return itemSaida;		
+	}
+	
+public Date infoSaida() throws ParseException {
+		
+		System.out.println("Informe a data da venda/saída: (dd/MM/aaaa)");
+		String dataEntrada = scanner.next();
+		Date data = new SimpleDateFormat("dd/MM/yyyy").parse(dataEntrada);
+		
+		return data;
 	}
 
 }

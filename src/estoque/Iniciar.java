@@ -3,19 +3,34 @@ package estoque;
 import java.text.ParseException;
 import java.util.Scanner;
 
+import estoque.Item.EntradaItemServico;
+import estoque.Item.IEntradaItemServico;
+import estoque.Item.IItemServico;
+import estoque.Item.ISaidaItemServico;
+import estoque.Item.Item;
+import estoque.Item.ItemServico;
+import estoque.Item.SaidaItemServico;
+import estoque.Relatorio.IRelatorioServico;
+import estoque.Relatorio.RelatorioEstoqueServico;
+import estoque.Relatorio.RelatorioOrdemCompraServico;
+import estoque.Usuario.IUsuarioServico;
+import estoque.Usuario.Usuario;
+import estoque.Usuario.UsuarioServico;
+
 public class Iniciar {
 	
 	private Scanner scanner = new Scanner(System.in);
-	private UsuarioServico usuarioServico = new UsuarioServico();
-	private ItemServico itemServico = new ItemServico();
+	private IUsuarioServico usuarioServico = new UsuarioServico();
+	private IItemServico itemServico = new ItemServico();
 	private Visualizar visualizar = new Visualizar();
+	private IRelatorioServico relatorioServico;
 	
 	public void login() throws ParseException {
 			Usuario usuarioLogin = visualizar.solicitarDadosUsuario();			
 			
-			Usuario usuario = usuarioServico.selecionarUsuario(usuarioLogin.nome);
+			Usuario usuario = usuarioServico.selecionarUsuario(usuarioLogin.getNome());
 			
-			if (usuario != null && usuario.senha.equals(usuarioLogin.senha)) {
+			if (usuario != null && usuario.getSenha().equals(usuarioLogin.getSenha())) {
 				menu();
 			} else {
 				System.out.println("Usuario ou senha inválidos!");
@@ -32,13 +47,14 @@ public class Iniciar {
 			//cria item
 			if (opcao1 == 1) {
 				String retorno = criarItem();
+				
 				if(retorno != null)
 				{
 					System.out.println("Item " + retorno + " cadastrado com sucesso!");
 				}
 				else
 				{
-					System.out.println("Não foi possível cadastrar o item " + retorno);
+					System.out.println("Não foi possível cadastrar o item!");
 				}
 			//edita item
 			} else if(opcao1 == 2){
@@ -91,22 +107,23 @@ public class Iniciar {
 			break;
 		case 2: 
 			//entrada de itens
-			Entrada entrada = new Entrada();
-			entrada.entradaItem();
+			IEntradaItemServico entrada = new EntradaItemServico();
+			entrada.entrada();
 			break;
 		case 3:
 			//saida de itens
-			Saida saida = new Saida();
-			saida.saidaItem();
+			ISaidaItemServico saida = new SaidaItemServico();
+			saida.saida();
 			break;
 		case 4:
 			//Relatorios
-			RelatorioEstoque relatorioEstoque = new RelatorioEstoque();
-			relatorioEstoque.visualizar();
+			relatorioServico = new RelatorioEstoqueServico();
+			relatorioServico.visualizar();
 			break;
 		case 5:
 			//ordem de compra
-			itemServico.ordemCompra();
+			relatorioServico = new RelatorioOrdemCompraServico();
+			relatorioServico.visualizar();
 			break;
 		case 6:
 			//opcoes de usuário
@@ -129,8 +146,8 @@ public class Iniciar {
 				
 				Usuario usuario = usuarioServico.selecionarUsuario(nome);
 				
-				usuario.nome = usuarioEditar.nome;
-				usuario.senha = usuarioEditar.senha;
+				usuario.setNome(usuarioEditar.getNome());
+				usuario.setSenha(usuarioEditar.getSenha());
 				
 				String retorno = usuarioServico.editarUsuario(usuario);
 				
@@ -148,7 +165,7 @@ public class Iniciar {
 				
 				Usuario usuario = usuarioServico.selecionarUsuario(nome);
 				
-				String retorno = usuarioServico.deletarUsuario(usuario.codigo);
+				String retorno = usuarioServico.deletarUsuario(usuario.getCodigo());
 				
 				if(retorno != null)
 				{
