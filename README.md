@@ -1,2 +1,2 @@
 # controle-estoque
-Entrega de situação de aprendizagem para o curso de desenvolvimento de sistemas, Senai
+Entrega de situação de aprendizagem, Curso Desenvolvimento de Sistemas - Senai
